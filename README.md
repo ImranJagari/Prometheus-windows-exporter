@@ -59,3 +59,7 @@ This task query the Windows Management system to gather all hardware and operati
 You can check this thread on SO (https://stackoverflow.com/questions/27227125/where-can-i-find-all-tables-used-in-managementobjectsearcher-in-win32-api) 
 or in MSDN on the Win32 section (https://docs.microsoft.com/fr-fr/windows/win32/cimwin32prov/computer-system-hardware-classes)
 
+# Credits
+
+Thanks to 
+  - Kabindas for his iis log parser (https://github.com/Kabindas/IISLogParser)
