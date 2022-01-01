@@ -8,7 +8,7 @@ Every data is configurable with appsettings.json file
 ```json
 {
   "IISLogTask": {
-    "Enabled": false, // if enabled is setted to false, the task is runnable
+    "Enabled": false, // if enabled is setted to false, the task won't run
     "PathToLogs": "Path to your iis log folder"
   },
   "PerformanceTask": {
