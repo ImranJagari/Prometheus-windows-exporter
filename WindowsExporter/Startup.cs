@@ -1,13 +1,15 @@
 ﻿using WindowsExporter.Core.Helper;
 using WindowsExporter.Services;
 using WindowsExporter.Services.Background;
+using WindowsExporter.Services.ComputerSystem;
 using WindowsExporter.Services.IIS;
+using WindowsExporter.Services.IISLogs;
 using WindowsExporter.Services.OS;
 using WindowsExporter.Services.Performance;
 
 namespace WindowsExporter
 {
-    internal class Startup
+    public class Startup
     {
         private IConfiguration _configuration;
 
@@ -18,13 +20,14 @@ namespace WindowsExporter
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
 
             services
                 .AddSingleton<PerformanceTask>()
                 .AddSingleton<IISLogTask>()
                 .AddSingleton<WMITask>()
-                .AddHostedService<PrometheusScrapperService>(provider =>
+                .AddSingleton<ComputerSystemTask>()
+                .AddSingleton<IISTask>()
+                .AddSingleton<IExporterTask[]>(provider =>
                 {
                     List<IExporterTask> services = new List<IExporterTask>();
 
@@ -35,12 +38,15 @@ namespace WindowsExporter
                         if (service.CanExecute())
                         {
                             service.Initialize();
+                            service.IsInitialized = true;
                             services.Add(service);
                         }
                     }
 
-                    return new PrometheusScrapperService(services.ToArray());
+                    return services.ToArray();
                 });
+
+            services.AddControllers();
 
         }
 

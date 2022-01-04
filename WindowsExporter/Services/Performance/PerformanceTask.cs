@@ -14,7 +14,7 @@ using WindowsExporter.Models.Https;
 
 namespace WindowsExporter.Services.Performance
 {
-    internal class PerformanceTask : BaseExporterTask<PerformanceConfiguration>
+    public class PerformanceTask : BaseExporterTask<PerformanceConfiguration>
     {
         private IEnumerable<PerformanceCounter> _counters;
         private static readonly Dictionary<string, string> unicodeCharactersName = new()
@@ -37,13 +37,13 @@ namespace WindowsExporter.Services.Performance
             {
                 if (!PerformanceCounterCategory.Exists(_.CategoryName) || !_configuration.Categories[_.CategoryName].Enabled)
                     return new List<PerformanceCounter>();
+                var configCounters = _configuration.Categories[_.CategoryName].Counters;
 
                 List<PerformanceCounter> countersCategories = new List<PerformanceCounter>();
                 if (_.CategoryType == PerformanceCounterCategoryType.MultiInstance)
                 {
                     foreach (var instance in _.GetInstanceNames())
                     {
-                        var configCounters = _configuration.Categories[_.CategoryName].Counters;
                         PerformanceCounter[] counters = _.GetCounters(instance);
 
                         if (configCounters is not null)
@@ -54,7 +54,12 @@ namespace WindowsExporter.Services.Performance
                 }
                 else
                 {
-                    countersCategories.AddRange(_.GetCounters());
+                    PerformanceCounter[] counters = _.GetCounters();
+
+                    if (configCounters is not null)
+                        counters = counters.Where(_ => configCounters.ContainsKey(_.CounterName) && configCounters[_.CounterName].Enabled).ToArray();
+
+                    countersCategories.AddRange(counters);
                 }
 
 
@@ -66,7 +71,7 @@ namespace WindowsExporter.Services.Performance
         {
             _models.Clear();
             
-            foreach(var counter in _counters)
+            foreach(var counter in _counters.DistinctBy(_ => _.CounterName))
             {
                 var key = GetPrometheusKeyName($"{counter.CategoryName} {counter.CounterName}");
                 var model = _models.FirstOrDefault(_ => _.KeyName == key);
@@ -95,8 +100,8 @@ namespace WindowsExporter.Services.Performance
 
         public override IEnumerable<PrometheusFiltersValueModel> GetDatas(string key)
         {
-            var counter = _counters.FirstOrDefault(_ => _.CounterName == key);
-            if(counter is not null)
+            var counters = _counters.Where(_ => _.CounterName == key).DistinctBy(_ => _.InstanceName);
+            foreach(var counter in counters)
             {
                 float value = counter.NextValue();
 
@@ -124,7 +129,7 @@ namespace WindowsExporter.Services.Performance
             foreach (var character in unicodeCharactersName)
                 name = name.Replace(character.Key, character.Value);
 
-            return $"windows_{name.Trim().Underscore()}";
+            return $"windows_{name.Humanize().Trim().Underscore()}";
         }
 
         private PrometheusMetricTypeEnum GetMetricType(PerformanceCounter counter)

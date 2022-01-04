@@ -1,16 +1,16 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Concurrent;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 using WindowsExporter.Models.Internal;
 
-namespace WindowsExporter.Services.IIS
+namespace WindowsExporter.Services.IISLogs
 {
     internal class IISLogTask : BaseExporterTask<IISLogConfiguration>
     {
         private static string RequestStatusCountKeyName = "requests_status_count";
         private static string RequestMethodCountKeyName = "requests_method_count";
 
-        private static List<IISLogEvent> _logs = new List<IISLogEvent>();
+        private static ConcurrentDictionary<string, List<IISLogEvent>> _logs = new ConcurrentDictionary<string, List<IISLogEvent>>();
 
         public IISLogTask(IConfiguration configuration) : base(configuration)
         {
@@ -53,19 +53,25 @@ namespace WindowsExporter.Services.IIS
         {
             using (IISLogEngine parser = new IISLogEngine(filePath))
             {
-                IEnumerable<IISLogEvent> collection = parser.ParseLog().Skip(_logs.Count);
-                if (collection.Any())
-                    _logs.AddRange(collection);
+                IEnumerable<IISLogEvent> collection = parser.ParseLog();
+                if (_logs.ContainsKey(filePath))
+                {
+                    _logs[filePath] = collection.ToList();
+                }
+                else
+                {
+                    _logs.TryAdd(filePath, collection.ToList());
+                }
             }
         }
 
         public override IEnumerable<PrometheusFiltersValueModel> GetDatas(string key)
         {
-            foreach (var siteGroup in _logs.GroupBy(_ => _.sSitename))
+            foreach (var siteGroup in _logs.SelectMany(_ => _.Value).GroupBy(_ => _.sSitename))
             {
                 if (key == RequestStatusCountKeyName)
                 {
-                    foreach (var group in _logs.GroupBy(_ => _.scStatus))
+                    foreach (var group in siteGroup.GroupBy(_ => _.scStatus))
                     {
                         yield return new PrometheusFiltersValueModel
                         {
@@ -76,7 +82,7 @@ namespace WindowsExporter.Services.IIS
                 }
                 else if (key == RequestMethodCountKeyName)
                 {
-                    foreach (var group in _logs.GroupBy(_ => _.csMethod))
+                    foreach (var group in siteGroup.GroupBy(_ => _.csMethod))
                     {
                         yield return new PrometheusFiltersValueModel
                         {

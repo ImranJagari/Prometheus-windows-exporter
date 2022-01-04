@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace WindowsExporter
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {

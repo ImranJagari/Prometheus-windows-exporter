@@ -6,7 +6,7 @@ using WindowsExporter.Core.Enums;
 
 namespace WindowsExporter.Services.OS
 {
-    internal class WMITask : BaseExporterTask<WMIConfiguration>
+    public class WMITask : BaseExporterTask<WMIConfiguration>
     {
         private readonly CimType[] _authorizedCimTypes = new CimType[]
         {
@@ -19,7 +19,8 @@ namespace WindowsExporter.Services.OS
             CimType.UInt8,
             CimType.UInt16,
             CimType.UInt32,
-            CimType.UInt64
+            CimType.UInt64,
+            CimType.String,
         };
         Dictionary<string, PropertyData> _osProperties = new Dictionary<string, PropertyData>();
         public WMITask(IConfiguration configuration) : base(configuration)
@@ -79,14 +80,28 @@ namespace WindowsExporter.Services.OS
         {
             if (_osProperties.ContainsKey(key) && _authorizedCimTypes.Contains(_osProperties[key].Type))
             {
-                return new[]
+                if (_osProperties[key].Type != CimType.String)
                 {
-                    new PrometheusFiltersValueModel
+                    return new[]
                     {
-                        Filters = string.Empty,
-                        Value = $"{_osProperties[key].Value}"
-                    }
-                };
+                        new PrometheusFiltersValueModel
+                        {
+                            Filters = string.Empty,
+                            Value = $"{_osProperties[key].Value}"
+                        }
+                    };
+                }
+                else
+                {
+                    return new[]
+                    {
+                        new PrometheusFiltersValueModel
+                        {
+                            Filters = $"{{{_osProperties[key].Name.Underscore()}=\"{_osProperties[key].Value}\"}}",
+                            Value = $"1"
+                        }
+                    };
+                }
             }
 
             return Array.Empty<PrometheusFiltersValueModel>();

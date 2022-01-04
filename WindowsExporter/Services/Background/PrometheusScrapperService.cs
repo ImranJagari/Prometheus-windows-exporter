@@ -12,14 +12,16 @@ using WindowsExporter.Services.Performance;
 
 namespace WindowsExporter.Services.Background
 {
-    internal class PrometheusScrapperService : BackgroundService
+    public class PrometheusScrapperService : BackgroundService
     {
         public static ConcurrentBag<PrometheusDataModel> PrometheusDatas = new ConcurrentBag<PrometheusDataModel>();
         private readonly IExporterTask[] exporterTasks;
+        private readonly ILogger<PrometheusScrapperService> _logger;
 
-        public PrometheusScrapperService(IExporterTask[] tasks)
+        public PrometheusScrapperService(IExporterTask[] tasks, ILogger<PrometheusScrapperService> logger)
         {
             this.exporterTasks = tasks;
+            this._logger = logger;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,7 +34,14 @@ namespace WindowsExporter.Services.Background
 
                     foreach(var task in exporterTasks)
                     {
-                        logs.AddRange(await task.ProcessAsync());
+                        try
+                        {
+                            logs.AddRange(await task.ProcessAsync());
+                        }
+                        catch(Exception ex)
+                        {
+                            _logger.LogError(ex, ex.Message);
+                        }
                     }
 
                     foreach (var log in logs)

@@ -4,13 +4,14 @@ using WindowsExporter.Models.Https;
 
 namespace WindowsExporter.Services
 {
-    internal interface IExporterTask
+    public interface IExporterTask
     {
         bool CanExecute();
         Task<List<PrometheusDataModel>> ProcessAsync();
         void Initialize();
+        bool IsInitialized { get; set; }
     }
-    internal abstract class BaseExporterTask<TConfiguration> : IExporterTask
+    public abstract class BaseExporterTask<TConfiguration> : IExporterTask
         where TConfiguration : BaseConfiguration
     {
         protected TConfiguration _configuration;
@@ -22,9 +23,8 @@ namespace WindowsExporter.Services
 
         public abstract Task<List<PrometheusDataModel>> ProcessAsync();
         public abstract void Initialize();
-
+        public bool IsInitialized { get; set; }
         protected virtual string PrefixKeyName => _configuration.PrefixKeyName;
-
         public virtual bool CanExecute()
         {
             return _configuration.Enabled;

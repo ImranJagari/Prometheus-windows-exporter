@@ -2,7 +2,7 @@
 
 namespace WindowsExporter.Models.Internal
 {
-    internal class IISLogEvent
+    public class IISLogEvent
     {
         public DateTime DateTimeEvent { get; set; }
         public string sSitename { get; set; }

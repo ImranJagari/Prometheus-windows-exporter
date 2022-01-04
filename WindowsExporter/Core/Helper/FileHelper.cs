@@ -3,7 +3,7 @@ using System.IO;
 
 namespace WindowsExporter.Core.Helper
 {
-    internal static class FileHelper
+    public static class FileHelper
     {
         public static List<string> ReadAllLines(string file)
         {
