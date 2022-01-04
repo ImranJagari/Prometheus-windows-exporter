@@ -1,6 +1,6 @@
 # Prometheus windows exporter
 
-this exporter is a runnable executable that launch the webserver to deserve data from windows hosts for prometheus processing.
+this exporter is an executable that launch a webserver to deserve data from windows hosts for prometheus processing.
 
 ## Settings
 
