@@ -18,7 +18,7 @@ namespace WindowsExporter.Services
 
         protected BaseExporterTask(IConfiguration configuration)
         {
-            _configuration = configuration.GetSection(this.GetType().Name).Get<TConfiguration>();
+            _configuration = configuration.GetSection(this.GetType().Name)?.Get<TConfiguration>() ?? throw new Exception($"Configuration section {this.GetType().Name} not found or malformatted !");
         }
 
         public abstract Task<List<PrometheusDataModel>> ProcessAsync();
