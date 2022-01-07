@@ -37,6 +37,12 @@ Every data is configurable with appsettings.json file
         }
       }
     }
+  },
+  "ComputerSystemTask": {
+    "Enabled": false
+  },
+  "IISTask": {
+    "Enabled": false
   }
 }
 ```
@@ -58,6 +64,14 @@ Check the performance monitor to get all categories and counters names from your
 This task query the Windows Management system to gather all hardware and operating system values.
 You can check this thread on SO (https://stackoverflow.com/questions/27227125/where-can-i-find-all-tables-used-in-managementobjectsearcher-in-win32-api) 
 or in MSDN on the Win32 section (https://docs.microsoft.com/fr-fr/windows/win32/cimwin32prov/computer-system-hardware-classes)
+
+## ComputerSystemTask
+
+This task get informations from system as hostname and domain, it can be improved by adding more datas
+
+## IISTask
+
+This task get all data from the IIS servers configuration with the package Microsoft.Web.Administration, it retrieve iis applications and pool datas
 
 # Credits
 
