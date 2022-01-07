@@ -38,10 +38,5 @@ namespace WindowsExporter.Services.IIS
 
             return Task.FromResult(datas);
         }
-
-        protected override string GetPrometheusKeyName(string name)
-        {
-            return $"windows_iis_servers_{name.Underscore()}";
-        }
     }
 }

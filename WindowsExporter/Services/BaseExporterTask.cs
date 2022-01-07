@@ -8,6 +8,7 @@ namespace WindowsExporter.Services
     {
         bool CanExecute();
         Task<List<PrometheusDataModel>> ProcessAsync();
+        void Update();
         void Initialize();
         bool IsInitialized { get; set; }
     }
@@ -22,6 +23,12 @@ namespace WindowsExporter.Services
         }
 
         public abstract Task<List<PrometheusDataModel>> ProcessAsync();
+        public void Update()
+        {
+            IsInitialized = false;
+            Initialize();
+            IsInitialized = true;
+        }
         public abstract void Initialize();
         public bool IsInitialized { get; set; }
         protected virtual string PrefixKeyName => _configuration.PrefixKeyName;
@@ -36,7 +43,7 @@ namespace WindowsExporter.Services
         }
         protected virtual string GetPrometheusKeyName(string name)
         {
-            return PrefixKeyName + this.GetType().Name.Underscore();
+            return PrefixKeyName + "_" + name.Underscore();
         }
     }
 }

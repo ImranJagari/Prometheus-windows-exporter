@@ -93,10 +93,5 @@ namespace WindowsExporter.Services.IISLogs
                 }
             }
         }
-
-        protected override string GetPrometheusKeyName(string name)
-        {
-            return $"windows_iis_logs_{name}";
-        }
     }
 }

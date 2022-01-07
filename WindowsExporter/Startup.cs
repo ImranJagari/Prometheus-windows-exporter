@@ -20,6 +20,7 @@ namespace WindowsExporter
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
 
             services
                 .AddSingleton<PerformanceTask>()

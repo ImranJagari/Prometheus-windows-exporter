@@ -106,10 +106,5 @@ namespace WindowsExporter.Services.OS
 
             return Array.Empty<PrometheusFiltersValueModel>();
         }
-
-        protected override string GetPrometheusKeyName(string name)
-        {
-            return $"windows_management_{name}";
-        }
     }
 }

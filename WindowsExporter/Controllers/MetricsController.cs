@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WindowsExporter.Models.Https;
 using WindowsExporter.Services;
-using WindowsExporter.Services.Background;
 
 namespace WindowsExporter.Controllers
 {
@@ -9,24 +9,33 @@ namespace WindowsExporter.Controllers
     {
         private readonly IExporterTask[] exporterTasks;
         private readonly ILogger<MetricsController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public MetricsController(IExporterTask[] exporterTasks, ILogger<MetricsController> logger)
+        public MetricsController(IExporterTask[] exporterTasks, ILogger<MetricsController> logger, IMemoryCache cache)
         {
             this.exporterTasks = exporterTasks;
             this._logger = logger;
+            this._cache = cache;
         }
 
         [Route("/metrics")]
         public async Task<string> GetMetrics()
         {
             List<PrometheusDataModel> list = new List<PrometheusDataModel>();
-
             foreach (var task in exporterTasks)
             {
                 try
                 {
                     if (task.IsInitialized)
-                        list.AddRange(await task.ProcessAsync());
+                    {
+                        List<PrometheusDataModel> collection = await task.ProcessAsync();
+                        _cache.Set(task.GetType().Name, collection);
+                        list.AddRange(collection);
+                    }
+                    else
+                    {
+                        list.AddRange(_cache.Get<List<PrometheusDataModel>>(task.GetType().Name) ?? new List<PrometheusDataModel>());
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -46,6 +55,5 @@ namespace WindowsExporter.Controllers
                 return string.Empty;
             }).Where(_ => !string.IsNullOrEmpty(_)));
         }
-
     }
 }

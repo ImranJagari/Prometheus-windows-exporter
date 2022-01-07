@@ -42,10 +42,5 @@ namespace WindowsExporter.Services.ComputerSystem
 
             return Task.FromResult(datas);
         }
-
-        protected override string GetPrometheusKeyName(string name)
-        {
-            return $"windows_cs_{name.Underscore()}";
-        }
     }
 }
