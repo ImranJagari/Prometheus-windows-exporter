@@ -3,7 +3,7 @@ using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 using WindowsExporter.Models.Internal;
 
-namespace WindowsExporter.Services.IISLogs
+namespace WindowsExporter.Services.Tasks.IISLogs
 {
     internal class IISLogTask : BaseExporterTask<IISLogConfiguration>
     {
@@ -67,7 +67,7 @@ namespace WindowsExporter.Services.IISLogs
 
         public override IEnumerable<PrometheusFiltersValueModel> GetDatas(string key)
         {
-            foreach (var siteGroup in _logs.SelectMany(_ => _.Value).GroupBy(_ => _.sSitename))
+            foreach (var siteGroup in _logs.Where(_ => _.Key.Contains($"u_ex{DateTime.Now:yyMMdd}")).SelectMany(_ => _.Value).GroupBy(_ => _.sSitename))
             {
                 if (key == RequestStatusCountKeyName)
                 {

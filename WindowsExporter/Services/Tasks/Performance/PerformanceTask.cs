@@ -1,13 +1,7 @@
 ﻿using Humanizer;
-using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WindowsExporter.Core.Enums;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;

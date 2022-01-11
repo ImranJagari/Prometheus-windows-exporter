@@ -1,11 +1,11 @@
 ﻿using WindowsExporter.Core.Helper;
 using WindowsExporter.Services;
 using WindowsExporter.Services.Background;
-using WindowsExporter.Services.ComputerSystem;
-using WindowsExporter.Services.IIS;
-using WindowsExporter.Services.IISLogs;
 using WindowsExporter.Services.OS;
 using WindowsExporter.Services.Performance;
+using WindowsExporter.Services.Tasks.ComputerSystem;
+using WindowsExporter.Services.Tasks.IIS;
+using WindowsExporter.Services.Tasks.IISLogs;
 
 namespace WindowsExporter
 {
@@ -45,7 +45,8 @@ namespace WindowsExporter
                     }
 
                     return services.ToArray();
-                });
+                })
+                .AddHostedService<TaskUpdaterBackgroundService>();
 
             services.AddControllers();
 

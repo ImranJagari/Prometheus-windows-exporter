@@ -4,7 +4,7 @@ using WindowsExporter.Core.Enums;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 
-namespace WindowsExporter.Services.IIS
+namespace WindowsExporter.Services.Tasks.IIS
 {
     public class IISTask : BaseExporterTask<IISConfiguration>
     {

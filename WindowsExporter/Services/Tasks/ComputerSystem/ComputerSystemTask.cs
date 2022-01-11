@@ -5,7 +5,7 @@ using WindowsExporter.Core.Enums;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 
-namespace WindowsExporter.Services.ComputerSystem
+namespace WindowsExporter.Services.Tasks.ComputerSystem
 {
     public class ComputerSystemTask : BaseExporterTask<ComputerSystemConfiguration>
     {

@@ -5,7 +5,7 @@ using System.IO;
 using WindowsExporter.Core.Helper;
 using WindowsExporter.Models.Internal;
 
-namespace WindowsExporter.Services.IISLogs
+namespace WindowsExporter.Services.Tasks.IISLogs
 {
     internal class IISLogEngine : IDisposable
     {
