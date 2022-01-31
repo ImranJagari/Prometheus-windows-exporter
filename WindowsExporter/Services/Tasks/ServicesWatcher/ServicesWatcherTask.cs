@@ -26,7 +26,7 @@ namespace WindowsExporter.Services.Tasks.Services
                 var serviceController = new ServiceController(service.ServiceName);
                 filters.Add(new PrometheusFiltersValueModel
                 {
-                    Filters = $"{{name=\"{serviceController.ServiceName},status=\"{serviceController.Status}\"\"}}",
+                    Filters = $"{{name=\"{serviceController.ServiceName}\",status=\"{serviceController.Status}\"}}",
                     Value = serviceController.Status == ServiceControllerStatus.Running ? "1" : "0"
                 });
 
