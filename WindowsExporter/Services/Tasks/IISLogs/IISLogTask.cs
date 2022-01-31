@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using WindowsExporter.Core.Enums;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 using WindowsExporter.Models.Internal;
@@ -32,7 +33,7 @@ namespace WindowsExporter.Services.Tasks.IISLogs
 
             datas.Add(new PrometheusDataModel
             {
-                Type = "counter",
+                Type = PrometheusMetricTypeEnum.counter,
                 Description = "Total request on the day based on site and on the method",
                 KeyName = GetPrometheusKeyName(RequestMethodCountKeyName),
                 FiltersValue = GetDatas(RequestMethodCountKeyName)
@@ -40,7 +41,7 @@ namespace WindowsExporter.Services.Tasks.IISLogs
 
             datas.Add(new PrometheusDataModel
             {
-                Type = "counter",
+                Type = PrometheusMetricTypeEnum.counter,
                 Description = "Total request on the day based on site and on the response status code",
                 KeyName = GetPrometheusKeyName(RequestStatusCountKeyName),
                 FiltersValue = GetDatas(RequestStatusCountKeyName)

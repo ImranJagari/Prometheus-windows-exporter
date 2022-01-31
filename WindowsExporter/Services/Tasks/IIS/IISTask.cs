@@ -27,7 +27,7 @@ namespace WindowsExporter.Services.Tasks.IIS
                 {
                     Description = "IIS Websites mapping site id with site name",
                     KeyName = GetPrometheusKeyName("sites"),
-                    Type = PrometheusMetricTypeEnum.counter.ToString(),
+                    Type = PrometheusMetricTypeEnum.counter,
                     FiltersValue = sites?.Select(_ => new PrometheusFiltersValueModel
                     {
                         Filters = $"{{site_id=\"W3SVC{_.Id}\",site_name=\"{_.Name}\",state=\"{_.State}\"}}",

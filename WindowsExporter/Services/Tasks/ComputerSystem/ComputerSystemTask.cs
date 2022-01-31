@@ -27,8 +27,8 @@ namespace WindowsExporter.Services.Tasks.ComputerSystem
                 new PrometheusDataModel
                 {
                     Description = "Labeled system hostname information as provided by ComputerSystem.DNSHostName and ComputerSystem.Domain",
-                    KeyName = GetPrometheusKeyName("Hostname"),
-                    Type = PrometheusMetricTypeEnum.counter.ToString(),
+                    KeyName = GetPrometheusKeyName("hostname"),
+                    Type = PrometheusMetricTypeEnum.counter,
                     FiltersValue = new List<PrometheusFiltersValueModel>
                     {
                         new PrometheusFiltersValueModel

@@ -1,9 +1,11 @@
-﻿namespace WindowsExporter.Models.Https
+﻿using WindowsExporter.Core.Enums;
+
+namespace WindowsExporter.Models.Https
 {
     public record PrometheusDataModel
     {
         public string KeyName { get; set; }
-        public string Type { get; set; }
+        public PrometheusMetricTypeEnum Type { get; set; }
         public string Description { get; set; }
         public IEnumerable<PrometheusFiltersValueModel> FiltersValue { get; set; }
 

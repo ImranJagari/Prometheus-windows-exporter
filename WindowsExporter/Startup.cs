@@ -1,11 +1,12 @@
-﻿using WindowsExporter.Core.Helper;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
+using WindowsExporter.Core.Helper;
 using WindowsExporter.Services;
 using WindowsExporter.Services.Background;
-using WindowsExporter.Services.OS;
-using WindowsExporter.Services.Performance;
-using WindowsExporter.Services.Tasks.ComputerSystem;
-using WindowsExporter.Services.Tasks.IIS;
-using WindowsExporter.Services.Tasks.IISLogs;
 
 namespace WindowsExporter
 {
@@ -21,18 +22,16 @@ namespace WindowsExporter
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+            var types = TypeHelper.GetTypesFromBase<IExporterTask>();
+
+            foreach (var type in types)
+                services.AddSingleton(type);
 
             services
-                .AddSingleton<PerformanceTask>()
-                .AddSingleton<IISLogTask>()
-                .AddSingleton<WMITask>()
-                .AddSingleton<ComputerSystemTask>()
-                .AddSingleton<IISTask>()
                 .AddSingleton<IExporterTask[]>(provider =>
                 {
-                    List<IExporterTask> services = new List<IExporterTask>();
+                    List<IExporterTask> tasks = new List<IExporterTask>();
 
-                    var types = TypeHelper.GetTypesFromBase<IExporterTask>();
                     foreach (var type in types)
                     {
                         var service = provider.GetService(type) as IExporterTask;
@@ -40,11 +39,11 @@ namespace WindowsExporter
                         {
                             service.Initialize();
                             service.IsInitialized = true;
-                            services.Add(service);
+                            tasks.Add(service);
                         }
                     }
 
-                    return services.ToArray();
+                    return tasks.ToArray();
                 })
                 .AddHostedService<TaskUpdaterBackgroundService>();
 

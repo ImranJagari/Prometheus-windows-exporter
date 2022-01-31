@@ -19,7 +19,7 @@ namespace WindowsExporter.Services
 
         protected BaseExporterTask(IConfiguration configuration)
         {
-            _configuration = configuration.GetSection(this.GetType().Name)?.Get<TConfiguration>() ?? throw new Exception($"Configuration section {this.GetType().Name} not found or malformatted !");
+            _configuration = configuration.GetSection(this.GetType().Name)?.Get<TConfiguration>();
         }
 
         public abstract Task<List<PrometheusDataModel>> ProcessAsync();
@@ -34,16 +34,19 @@ namespace WindowsExporter.Services
         protected virtual string PrefixKeyName => _configuration.PrefixKeyName;
         public virtual bool CanExecute()
         {
-            return _configuration.Enabled;
+            return _configuration?.Enabled ?? false;
         }
 
         public virtual IEnumerable<PrometheusFiltersValueModel> GetDatas(string key)
         {
             return null;
         }
-        protected virtual string GetPrometheusKeyName(string name)
+        protected virtual string GetPrometheusKeyName(string name = null)
         {
-            return PrefixKeyName + "_" + name.Underscore();
+            if (!string.IsNullOrWhiteSpace(name))
+                return PrefixKeyName + "_" + name.Underscore();
+
+            return PrefixKeyName;
         }
     }
 }

@@ -76,7 +76,7 @@ namespace WindowsExporter.Services.Performance
                     {
                         KeyName = key,
                         Description = string.Concat(counter.CounterHelp.TakeWhile(_ => !_.Equals('.'))),
-                        Type = GetMetricType(counter).ToString(),
+                        Type = GetMetricType(counter),
                         FiltersValue = GetDatas(counter.CounterName)
                     });
                 }

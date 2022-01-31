@@ -67,7 +67,7 @@ namespace WindowsExporter.Services.OS
                 models.Add(new PrometheusDataModel
                 {
                     Description = $"Value for {prop.Key} from {prop.Value.Origin}.",
-                    Type = PrometheusMetricTypeEnum.counter.ToString(),
+                    Type = PrometheusMetricTypeEnum.counter,
                     KeyName = GetPrometheusKeyName((prop.Value.Origin + prop.Key).Underscore()),
                     FiltersValue = GetDatas(prop.Key)
                 });
