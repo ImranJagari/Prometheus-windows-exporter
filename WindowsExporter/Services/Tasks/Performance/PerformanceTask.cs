@@ -1,8 +1,13 @@
 ﻿using Humanizer;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using WindowsExporter.Core.Enums;
+using WindowsExporter.Core.Extensions;
 using WindowsExporter.Models.Configurations;
 using WindowsExporter.Models.Https;
 
@@ -64,8 +69,9 @@ namespace WindowsExporter.Services.Performance
         public override Task<List<PrometheusDataModel>> ProcessAsync()
         {
             _models.Clear();
-            
-            foreach(var counter in _counters.DistinctBy(_ => _.CounterName))
+            IEnumerable<PerformanceCounter> counters = _counters.DistinctBy(_ => _.CounterName);
+
+            foreach (var counter in counters)
             {
                 var key = GetPrometheusKeyName($"{counter.CategoryName} {counter.CounterName}");
                 var model = _models.FirstOrDefault(_ => _.KeyName == key);

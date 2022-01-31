@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace WindowsExporter.Core.Helper
 {
@@ -8,7 +11,7 @@ namespace WindowsExporter.Core.Helper
             where TBase : class
         {
             var asm = Assembly.GetExecutingAssembly();
-            return asm.GetTypes().Where(_ => _.IsAssignableTo(typeof(TBase)) && !_.IsAbstract && !_.IsInterface);
+            return asm.GetTypes().Where(_ => typeof(TBase).IsAssignableFrom(_) && !_.IsAbstract && !_.IsInterface);
         }
     }
 }

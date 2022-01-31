@@ -1,6 +1,6 @@
 ﻿namespace WindowsExporter.Models.Configurations
 {
-    public record IISLogConfiguration : BaseConfiguration
+    public class IISLogConfiguration : BaseConfiguration
     {
         public string PathToLogs { get; set; }
     }

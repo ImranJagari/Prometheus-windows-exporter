@@ -1,9 +1,12 @@
-﻿using WindowsExporter.Models.Configurations;
-using WindowsExporter.Models.Https;
-using System.ServiceProcess;
+﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Concurrent;
-using System.Management;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceProcess;
+using System.Threading.Tasks;
 using WindowsExporter.Core.Enums;
+using WindowsExporter.Models.Configurations;
+using WindowsExporter.Models.Https;
 
 namespace WindowsExporter.Services.Tasks.Services
 {

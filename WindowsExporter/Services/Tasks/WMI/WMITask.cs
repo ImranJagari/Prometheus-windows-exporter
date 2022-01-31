@@ -3,6 +3,11 @@ using WindowsExporter.Models.Https;
 using System.Management;
 using Humanizer;
 using WindowsExporter.Core.Enums;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System;
 
 namespace WindowsExporter.Services.OS
 {

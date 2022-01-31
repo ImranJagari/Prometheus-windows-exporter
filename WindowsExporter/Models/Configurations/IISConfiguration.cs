@@ -1,6 +1,6 @@
 ﻿namespace WindowsExporter.Models.Configurations
 {
-    public record IISConfiguration : BaseConfiguration
+    public class IISConfiguration : BaseConfiguration
     {
     }
 }

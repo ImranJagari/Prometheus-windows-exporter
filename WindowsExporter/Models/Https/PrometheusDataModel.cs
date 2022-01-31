@@ -1,8 +1,10 @@
-﻿using WindowsExporter.Core.Enums;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WindowsExporter.Core.Enums;
 
 namespace WindowsExporter.Models.Https
 {
-    public record PrometheusDataModel
+    public class PrometheusDataModel
     {
         public string KeyName { get; set; }
         public PrometheusMetricTypeEnum Type { get; set; }

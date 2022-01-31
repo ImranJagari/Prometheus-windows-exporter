@@ -1,4 +1,9 @@
-﻿namespace WindowsExporter.Services.Background
+﻿using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace WindowsExporter.Services.Background
 {
     public class TaskUpdaterBackgroundService : BackgroundService
     {
