@@ -29,6 +29,7 @@ namespace WindowsExporter.Services.Tasks.IISLogs
 
         public override Task<List<PrometheusDataModel>> ProcessAsync()
         {
+            _logs.Clear();
             var files = Directory.EnumerateFiles(_configuration.PathToLogs, $"u_ex{DateTime.Now:yyMMdd}*.log", SearchOption.AllDirectories);
             Parallel.ForEach(files, file =>
             {
