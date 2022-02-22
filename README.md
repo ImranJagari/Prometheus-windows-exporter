@@ -2,6 +2,10 @@
 
 this exporter is an executable that launch a webserver to deserve data from windows hosts for prometheus processing.
 
+## Grafana Dashboard
+I've made a grafana dashboard with this exporter, feel free to download it, rate it and let a comment to improve it 
+https://grafana.com/grafana/dashboards/15652
+
 ## Settings
 
 Every data is configurable with appsettings.json file
